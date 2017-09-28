@@ -1,7 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/urfave/cli"
+
+	"github.com/ikmski/password"
 )
 
 var (
@@ -11,10 +15,27 @@ var (
 
 func verifyPassword(c *cli.Context) error {
 
+	if c.NArg() != 1 {
+		return fmt.Errorf("A password is required as an argument")
+	}
+	pass := c.Args()[0]
+
+	pp := password.NewPasswordPolicy()
+
+	ok := pp.Verify(pass)
+	if !ok {
+		return fmt.Errorf("The password is not Valid")
+	}
+
 	return nil
 }
 
 func generatePassword(c *cli.Context) error {
+
+	pp := password.NewPasswordPolicy()
+
+	pass := pp.Random()
+	fmt.Println(pass)
 
 	return nil
 }
